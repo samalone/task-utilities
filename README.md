@@ -3,9 +3,8 @@
 TaskUtilities is a small collection of types that help troubleshoot asynchronous
 Swift code and make synchronous code safe to call from an asynchronous context.
 
-> [!IMPORTANT]
-> `RecursiveTaskLock` and `LockedValue` are only intended for unusual
-> cases where you must make synchronous code safe to call from multiple
+> [!IMPORTANT] > `RecursiveTaskLock` and `LockedValue` are only intended for
+> unusual cases where you must make synchronous code safe to call from multiple
 > asynchronous tasks. Use these classes sparingly because they are blocking and
 > subject to deadlocks like the
 > [dining philosopher's problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem).
@@ -38,6 +37,23 @@ class Names {
     }
 }
 ```
+
+### Why not NSLock?
+
+In the example above an `NSLock` would also work fine. But in more complex cases
+where there could be nested locks, a recursive lock is needed. For instance if
+`add` called `contains`, or `add` called an external closure that might call
+`contains`, a recursive lock is needed.
+
+### Why not NSRecursiveLock?
+
+`NSRecursiveLock` locks a thread, but Swift Tasks can move from thread to
+thread. That makes `NSRecursiveLock` unsafe because:
+
+1. two tasks running on the same thread could share a lock
+2. the same task running on a different thread might block waiting for the lock
+
+`RecursiveTaskLock` locks the operation to one task, not one thread.
 
 ## LockedValue
 
