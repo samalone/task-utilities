@@ -3,13 +3,14 @@
 TaskUtilities is a small collection of types that help troubleshoot asynchronous
 Swift code and make synchronous code safe to call from an asynchronous context.
 
-[!IMPORTANT] `RecursiveTaskLock` and `LockedValue` are only intended for unusual
-cases where you must make synchronous code safe to call from multiple
-asynchronous tasks. Use these classes sparingly because they are blocking and
-subject to deadlocks like the
-[dining philosopher's problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem).
-If you have the option of writing asynchronous code, Swift actors are a better
-way to protect mutable state. [!IMPORTANT]
+> [!IMPORTANT]
+> `RecursiveTaskLock` and `LockedValue` are only intended for unusual
+> cases where you must make synchronous code safe to call from multiple
+> asynchronous tasks. Use these classes sparingly because they are blocking and
+> subject to deadlocks like the
+> [dining philosopher's problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem).
+> If you have the option of writing asynchronous code, Swift actors are a better
+> way to protect mutable state.
 
 ## RecursiveTaskLock
 
@@ -80,7 +81,7 @@ Task.detached {
 print(TaskPath.current) // Prints "{Task Fetch image}"
 ```
 
-If you name the same Task a different points in your code, the call structure
+If you name the same Task at different points in your code, the call structure
 will be preserved:
 
 ```swift
